@@ -54,6 +54,17 @@ namespace FlockTest
             set { velocity = value; }
         }
 
+        public bool IsColliding(Rectangle rect2)
+        {
+            Rectangle source = new Rectangle((int)position.X, (int)position.Y, 16, 16);
+            if(source.Intersects(rect2))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Updates the Boid's position based on velocity.
         /// </summary>
