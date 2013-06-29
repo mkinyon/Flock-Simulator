@@ -23,7 +23,12 @@ namespace FlockTest
         public Vector2 origin = Vector2.Zero;
 
 
-        //Constructor
+        /// <summary>
+        /// Constructor for Boid
+        /// </summary>
+        /// <param name="position">Object's location on the screen</param>
+        /// <param name="texture">Boid texture</param>
+        /// <param name="velocity">Initial velocity</param>
         public Boid(Vector2 position, Texture2D texture, Vector2 velocity)
         {
             this.position = position;
@@ -48,12 +53,11 @@ namespace FlockTest
             get { return velocity; }
             set { velocity = value; }
         }
-        /*
-        public Rectangle Destination
-        {
-            get { return new Rectangle((int)position.X, (int)position.Y, 16, 16); }
-        }
-        */
+
+        /// <summary>
+        /// Updates the Boid's position based on velocity.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public virtual void Update(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -61,6 +65,10 @@ namespace FlockTest
             position += (velocity * elapsed);
         }
  
+        /// <summary>
+        /// Adds the boid to the spriteBatch to be later drawn on screen.
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public virtual void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, sprite, tintColor, rotation, origin, 1.0f, SpriteEffects.None, 0.0f);
