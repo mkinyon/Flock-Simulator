@@ -15,12 +15,19 @@ namespace FlockTest
 
         private Texture2D texture;
 
+        //List to contain the boid objects
         public List<Boid> Boids = new List<Boid>();
+        
+        //Defines the minimum and maximum speeds for the boids
         private int minSpeed = 60;
         private int maxSpeed = 120;
 
+        //Random number generator used for spawning boids
         private Random rand = new Random();
 
+        /// <summary>
+        /// Adds a boid to the screen.
+        /// </summary>
         public void AddBoid()
         {
             Boid newBoid = new Boid(new Vector2(0, 0), texture, Vector2.Zero);
@@ -35,11 +42,28 @@ namespace FlockTest
             Boids.Add(newBoid);
         }
 
-        public void Clear()
+        /// <summary>
+        /// Returns the total count of boids on the screen
+        /// </summary>
+        /// <returns></returns>
+        public int BoidCount()
         {
-            Boids.Clear();
-        }
+            int count = 0;
 
+            foreach (Boid boid in Boids)
+            {
+                count++;
+            }
+
+            return count;
+        }
+        /// <summary>
+        /// Constructor for BoidManager
+        /// </summary>
+        /// <param name="boidCount">How many boids to spawn</param>
+        /// <param name="texture">Boid texture to be passed to the boid class</param>
+        /// <param name="screenWidth">Width of the simulation window</param>
+        /// <param name="screenHeight">Height of the simulation window</param>
         public BoidManager(int boidCount, Texture2D texture, int screenWidth, int screenHeight)
         {
             this.texture = texture;
@@ -52,16 +76,25 @@ namespace FlockTest
             }
         }
 
+        /// <summary>
+        /// Generates a random initial location for the boids.
+        /// </summary>
+        /// <returns>location</returns>
         private Vector2 randomLocation()
         {
             Vector2 location = Vector2.Zero;
 
+            //Sprits will only spawn inside the window.
             location.X = rand.Next(50, screenWidth - 50);
             location.Y = rand.Next(50, screenHeight - 50);
 
             return location;
         }
 
+        /// <summary>
+        /// Generates a random initial velocity for the boids.
+        /// </summary>
+        /// <returns>velocity</returns>
         private Vector2 randomVelocity()
         {
             Vector2 velocity = new Vector2(
@@ -72,19 +105,7 @@ namespace FlockTest
             return velocity;
         }
 
-        private bool isOnScreen(Boid boid)
-        {
-            if (boid.sprite.Intersects(new Rectangle(0, 0, screenWidth, screenHeight)))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        //Converts a Vector2 to a rotation 
+        //Converts a Vector2 to an angle 
         public float V2ToAngle(Vector2 direction)
         {
             //1.57079633 radians = 90 degrees
@@ -98,7 +119,7 @@ namespace FlockTest
                 //Rotation is based on velocity
                 boid.Rotation = V2ToAngle(boid.Velocity);
                 
-                //If the sprite collides with the border, reverse velocity.
+                //If the boid collides with the border, reverse velocity.
                 if (boid.Position.X > screenWidth)
                 {
                     Vector2 vel = boid.Velocity;
@@ -126,6 +147,7 @@ namespace FlockTest
                 boid.Update(gameTime);
             }
         }
+
 
         public void Draw(SpriteBatch spriteBatch)
         {
