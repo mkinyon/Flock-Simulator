@@ -58,7 +58,7 @@ namespace FlockTest
             // TODO: use this.Content to load your game content here
             boidTexture = Content.Load<Texture2D>(@"Textures\Boid");
 
-            boidManager = new BoidManager(500, boidTexture, this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
+            boidManager = new BoidManager(30, boidTexture, this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
         }
 
         /// <summary>
@@ -114,10 +114,9 @@ namespace FlockTest
             int count = boidManager.BoidCount();
             
             //Update title bar with framerate and total boid count
-            this.Window.Title = "Flock Simulator - FPS: " + frameRate.ToString() + " Boids: " + count.ToString();
+            this.Window.Title = "Flock Simulator - FPS: " + frameRate.ToString()
+                + " Boids: " + count.ToString();
             
-
-
             //Render spriteBatch
             spriteBatch.Begin();
             boidManager.Draw(spriteBatch);

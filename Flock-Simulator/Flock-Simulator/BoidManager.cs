@@ -9,6 +9,8 @@ namespace FlockTest
 {
     class BoidManager
     {
+        
+        //Be sure to update the window's size when changine these parameters.
         private int screenWidth = 800;
         private int screenHeight = 600;
         private int screenPadding = 8;
@@ -24,6 +26,10 @@ namespace FlockTest
 
         //Random number generator used for spawning boids
         private Random rand = new Random();
+
+        public 
+        int neighborRadius = 32;
+        public List<Boid> Neighbors= new List<Boid>();
 
         /// <summary>
         /// Adds a boid to the screen.
@@ -105,6 +111,33 @@ namespace FlockTest
             return velocity;
         }
 
+        //FindNeighbors: Get a list of neighbors within neighborRadius.
+        public void FindNeighbors(Vector2 target)
+        {
+            foreach (Boid boid in Boids)
+            {
+
+            }
+        }
+
+        //Cohesion: Average the location of all neighbors within neighborRadius.
+        public void Cohesion()
+        {
+
+        }
+
+        //Alignment: Average the velocitites of all neighbors with neighborRadius.
+        public void Alignment()
+        {
+
+        }
+
+        //Separation: Check neighbors within neighborRadius to see if it is a safe
+        // distance apart. If not, move away from nearest neighbor.
+        public void Separation()
+        {
+
+        }
 
         #region Screen Collisions
         public Rectangle LeftScreenBounds
