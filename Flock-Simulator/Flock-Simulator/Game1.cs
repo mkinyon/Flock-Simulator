@@ -19,7 +19,7 @@ namespace FlockTest
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        //Declerations
+        //My declarations
         Texture2D boidTexture;
         BoidManager boidManager;
 
@@ -58,7 +58,7 @@ namespace FlockTest
             // TODO: use this.Content to load your game content here
             boidTexture = Content.Load<Texture2D>(@"Textures\Boid");
 
-            boidManager = new BoidManager(1000, boidTexture, this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
+            boidManager = new BoidManager(500, boidTexture, this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
         }
 
         /// <summary>
@@ -82,6 +82,16 @@ namespace FlockTest
                 this.Exit();
 
             // TODO: Add your update logic here
+
+            //Pressing W will add 100 boids to the screen
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.W))
+            {
+                for(int x = 0; x < 100; x++)
+                {
+                    boidManager.AddBoid();
+                }
+            }
+
             boidManager.Update(gameTime);
 
             base.Update(gameTime);
@@ -93,9 +103,22 @@ namespace FlockTest
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             // TODO: Add your drawing code here
+
+            //Calculate the framerate and round it to the nearest whole number.
+            int frameRate = Convert.ToInt32(1 / (float)gameTime.ElapsedGameTime.TotalSeconds);
+            
+            //Get total count of boids on screen
+            int count = boidManager.BoidCount();
+            
+            //Update title bar with framerate and total boid count
+            this.Window.Title = "Flock Simulator - FPS: " + frameRate.ToString() + " Boids: " + count.ToString();
+            
+
+
+            //Render spriteBatch
             spriteBatch.Begin();
             boidManager.Draw(spriteBatch);
             spriteBatch.End();
