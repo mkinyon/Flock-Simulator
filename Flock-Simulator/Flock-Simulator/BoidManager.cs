@@ -11,7 +11,7 @@ namespace FlockTest
     {
         private int screenWidth = 800;
         private int screenHeight = 600;
-        private int screenPadding = 16;
+        private int screenPadding = 8;
 
         private Texture2D texture;
 
@@ -105,6 +105,29 @@ namespace FlockTest
             return velocity;
         }
 
+
+        #region Screen Collisions
+        public Rectangle LeftScreenBounds
+        {
+            get { return new Rectangle(-16, 0, 32, screenHeight); }
+        }
+
+        public Rectangle RightScreenBounds
+        {
+            get { return new Rectangle(screenWidth, 0, 16, screenHeight); }
+        }
+
+        public Rectangle TopScreenBounds
+        {
+            get { return new Rectangle(0, -16, screenWidth, 32); }
+        }
+
+        public Rectangle BottomScreenBounds
+        {
+            get { return new Rectangle(0, screenHeight, screenWidth, 16); }
+        } 
+        #endregion
+
         //Converts a Vector2 to an angle 
         public float V2ToAngle(Vector2 direction)
         {
@@ -116,29 +139,29 @@ namespace FlockTest
         {
             foreach (Boid boid in Boids)
             {
-                //Rotation is based on velocity
+                //Rotate boid based on velocity.
                 boid.Rotation = V2ToAngle(boid.Velocity);
                 
                 //If the boid collides with the border, reverse velocity.
-                if (boid.Position.X > screenWidth)
+                if (boid.IsColliding(RightScreenBounds))
                 {
                     Vector2 vel = boid.Velocity;
                     vel.X *= - 1;
                     boid.Velocity = vel;
                 }
-                if (boid.Position.X < 0)
+                if (boid.IsColliding(LeftScreenBounds))
                 {
                     Vector2 vel = boid.Velocity;
                     vel.X *= -1;
                     boid.Velocity = vel;
                 }
-                if (boid.Position.Y > screenHeight)
+                if (boid.IsColliding(BottomScreenBounds))
                 {
                     Vector2 vel = boid.Velocity;
                     vel.Y *= - 1;
                     boid.Velocity = vel;
                 }
-                if (boid.Position.Y < 0)
+                if (boid.IsColliding(TopScreenBounds))
                 {
                     Vector2 vel = boid.Velocity;
                     vel.Y *= - 1;
