@@ -56,9 +56,9 @@ namespace FlockTest
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            boidTexture = Content.Load<Texture2D>(@"Textures\Boid");
+            boidTexture = Content.Load<Texture2D>(@"Textures\Boid2");
 
-            boidManager = new BoidManager(30, boidTexture, this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
+            boidManager = new BoidManager(10, boidTexture, this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
         }
 
         /// <summary>
@@ -83,10 +83,10 @@ namespace FlockTest
 
             // TODO: Add your update logic here
 
-            //Pressing W will add 100 boids to the screen
+            //Pressing W will add 10 boids to the screen
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.W))
             {
-                for(int x = 0; x < 100; x++)
+                for(int x = 0; x < 10; x++)
                 {
                     boidManager.AddBoid();
                 }
