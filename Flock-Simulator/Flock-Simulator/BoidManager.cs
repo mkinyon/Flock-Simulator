@@ -27,9 +27,9 @@ namespace FlockTest
         //Random number generator used for spawning boids
         private Random rand = new Random();
 
-        public 
         int neighborRadius = 32;
-        public List<Boid> Neighbors= new List<Boid>();
+        int maxNeighbors= 6;
+        public List<Boid> Neighbors = new List<Boid>();
 
         /// <summary>
         /// Adds a boid to the screen.
@@ -39,6 +39,7 @@ namespace FlockTest
             Boid newBoid = new Boid(new Vector2(0, 0), texture, Vector2.Zero);
 
             newBoid.Position = randomLocation();
+            //newBoid.Position = new Vector2(400, 300);
             newBoid.Velocity = randomVelocity();
             //newBoid.Velocity = new Vector2(5, 0);
 
@@ -114,22 +115,56 @@ namespace FlockTest
         //FindNeighbors: Get a list of neighbors within neighborRadius.
         public void FindNeighbors(Vector2 target)
         {
+            int count = 0;
+            
             foreach (Boid boid in Boids)
             {
+                float dist;
+                dist = Vector2.Distance(boid.Position, target);
 
+                //If distannce is less the the neighborRadius, then add the boid to 
+                // the Neighbors list.
+                if (dist < neighborRadius)
+                {
+                    Neighbors.Add(boid);
+                    count++;  
+                }
+                else if (count == maxNeighbors)
+                {
+                    return;
+                }
             }
         }
 
         //Cohesion: Average the location of all neighbors within neighborRadius.
-        public void Cohesion()
+        public void Cohesion(Vector2 average)
         {
+            Vector2 sum = new Vector2();
+            int count = 0;
+            
+            foreach (Boid neighbors in Neighbors)
+            {
+                sum = sum + neighbors.Position;
+                count++;
+            }
 
+            average = new Vector2(sum.X / count, sum.Y / count);
         }
 
         //Alignment: Average the velocitites of all neighbors with neighborRadius.
-        public void Alignment()
+        public Vector2 Alignment(Vector2 velocity)
         {
+            Vector2 sum = new Vector2();
+            int count = 0;
 
+            foreach (Boid neighbors in Neighbors)
+            {
+                sum = sum + neighbors.Velocity;
+                count++;
+            }
+
+            //Return average velocity
+            return velocity = new Vector2(sum.X / count, sum.Y / count);
         }
 
         //Separation: Check neighbors within neighborRadius to see if it is a safe
@@ -139,6 +174,23 @@ namespace FlockTest
 
         }
 
+        public void CalculateFlock()
+        {
+            foreach (Boid boid in Boids)
+            {
+                //Look for neighbors
+                FindNeighbors(boid.Position);
+
+                //Calculate alignment
+                Alignment(boid.Position);
+
+                //Average alignment with boid's current velocity
+
+
+                //Clear Neighbors list
+                Neighbors.Clear();
+            }
+        }
         #region Screen Collisions
         public Rectangle LeftScreenBounds
         {
@@ -172,6 +224,11 @@ namespace FlockTest
         {
             foreach (Boid boid in Boids)
             {
+                //Calculate flock
+                FindNeighbors(boid.Position);
+                boid.Velocity = Alignment(boid.Velocity);
+                Neighbors.Clear();
+
                 //Rotate boid based on velocity.
                 boid.Rotation = V2ToAngle(boid.Velocity);
                 
